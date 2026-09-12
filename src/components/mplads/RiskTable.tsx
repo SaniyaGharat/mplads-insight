@@ -70,7 +70,7 @@ export function RiskTable({ rows, offset, selected, isLoading, onSelect, onLabel
                   {offset + i + 1}
                 </td>
                 <td className="px-3 py-2 font-medium whitespace-nowrap">{row.MP}</td>
-                <td className="px-3 py-2 whitespace-nowrap text-muted-foreground">{row.IDA}</td>
+                <td className="max-w-[190px] truncate px-3 py-2 text-muted-foreground">{row.IDA}</td>
                 <td className="px-3 py-2 text-right font-mono tabular-nums">
                   {formatINR(row.amount)}
                 </td>
@@ -96,16 +96,16 @@ export function RiskTable({ rows, offset, selected, isLoading, onSelect, onLabel
                         e.stopPropagation();
                         onLabel(row.work_index, "s");
                       }}
-                      className="border border-alert/40 px-1.5 py-0.5 text-[11px] text-alert hover:bg-alert/10"
+                      className="border border-alert/40 px-1.5 py-0.5 text-[11px] whitespace-nowrap text-alert hover:bg-alert/10"
                     >
-                      Suspicious
+                      Susp.
                     </button>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         onLabel(row.work_index, "n");
                       }}
-                      className="border border-ok/40 px-1.5 py-0.5 text-[11px] text-ok hover:bg-ok/10"
+                      className="border border-ok/40 px-1.5 py-0.5 text-[11px] whitespace-nowrap text-ok hover:bg-ok/10"
                     >
                       Normal
                     </button>

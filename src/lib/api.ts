@@ -230,7 +230,7 @@ function mockGraph(topN: number): GraphResponse {
 function mockExplain(workIndex: number): ExplainResponse {
   const base = seeded(workIndex);
   const pick = (offset: number) => {
-    const v = seeded(workIndex + offset);
+    const v = seeded(workIndex * (offset + 3) + offset * 17);
     return v > 0.5
       ? at(IDAS, Math.floor(v * IDAS.length))
       : at(MPS, Math.floor(v * MPS.length));
