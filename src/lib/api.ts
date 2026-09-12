@@ -169,6 +169,10 @@ const LABELS: LabelStatus[] = ["Training Label", "GAT-Top", "New"];
 
 const mockTotals: LabelTotals = { s: 0, n: 0, skip: 0 };
 
+function at<T>(arr: T[], i: number): T {
+  return arr[((i % arr.length) + arr.length) % arr.length] as T;
+}
+
 function seeded(n: number) {
   const x = Math.sin(n * 12.9898) * 43758.5453;
   return x - Math.floor(x);
@@ -186,14 +190,14 @@ function mockRiskScores(
     const r = seeded(rank + bias);
     return {
       work_index: 100000 + rank * 7 + bias,
-      MP: MPS[(rank + bias) % MPS.length],
-      IDA: IDAS[(rank * 3 + bias) % IDAS.length],
+      MP: at(MPS, rank + bias),
+      IDA: at(IDAS, rank * 3 + bias),
       amount: Math.round((5 + r * 240) * 100000),
       sanction_lag_days: Math.round(4 + seeded(rank * 2 + bias) * 730),
-      status: STATUSES[(rank + bias) % STATUSES.length],
-      category: CATEGORIES[(rank * 2 + bias) % CATEGORIES.length],
+      status: at(STATUSES, rank + bias),
+      category: at(CATEGORIES, rank * 2 + bias),
       score: Math.max(0.01, 0.995 - rank * 0.00006 - r * 0.02),
-      label_status: LABELS[(rank + bias) % LABELS.length],
+      label_status: at(LABELS, rank + bias),
     };
   });
   return { data, page, page_size: pageSize, total: MOCK_TOTAL };
@@ -228,15 +232,15 @@ function mockExplain(workIndex: number): ExplainResponse {
   const pick = (offset: number) => {
     const v = seeded(workIndex + offset);
     return v > 0.5
-      ? IDAS[Math.floor(v * IDAS.length) % IDAS.length]
-      : MPS[Math.floor(v * MPS.length) % MPS.length];
+      ? at(IDAS, Math.floor(v * IDAS.length))
+      : at(MPS, Math.floor(v * MPS.length));
   };
   const weights = [0.62 + base * 0.3, 0.35 + base * 0.25, 0.12 + base * 0.2];
   return {
     work_index: workIndex,
     top_neighbors: [0, 1, 2].map((i) => ({
       neighbor: pick(i + 1),
-      weight: Math.min(0.99, Number(weights[i].toFixed(2))),
+      weight: Math.min(0.99, Number(at(weights, i).toFixed(2))),
     })),
   };
 }
