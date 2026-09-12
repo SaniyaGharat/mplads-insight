@@ -248,3 +248,52 @@ function mockExplain(workIndex: number): ExplainResponse {
 export function formatINR(amount: number): string {
   return `₹${amount.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`;
 }
+
+// ---------------- stats ----------------
+
+export interface StatsResponse {
+  total_works: number;
+  total_amount: number;
+  avg_lag_days: number;
+  label_counts: { training_label: number; gat_top: number; new: number };
+  status_breakdown: { status: string; count: number }[];
+  score_distribution: { bucket: string; count: number }[];
+  top_risky_mps: { MP: string; flagged_count: number; total_flagged_amount: number }[];
+  avg_lag_flagged_vs_normal: { flagged_avg_lag: number; normal_avg_lag: number };
+}
+
+export async function fetchStats(): Promise<Sourced<StatsResponse>> {
+  try {
+    const data = await getJson<StatsResponse>(`/stats`);
+    return { data, source: "live" };
+  } catch (e) {
+    return { data: mockStats(), source: "mock", error: (e as Error).message };
+  }
+}
+
+function mockStats(): StatsResponse {
+  const status_breakdown = STATUSES.map((status, i) => ({
+    status,
+    count: Math.round(1200 + seeded(i + 1) * 4200),
+  }));
+  const buckets = ["0.0–0.1", "0.1–0.2", "0.2–0.3", "0.3–0.4", "0.4–0.5", "0.5–0.6", "0.6–0.7", "0.7–0.8", "0.8–0.9", "0.9–1.0"];
+  const score_distribution = buckets.map((bucket, i) => ({
+    bucket,
+    count: Math.round(4800 * Math.exp(-i * 0.62) + seeded(i + 5) * 90),
+  }));
+  const top_risky_mps = MPS.map((MP, i) => ({
+    MP,
+    flagged_count: Math.round(38 + seeded(i + 11) * 120),
+    total_flagged_amount: Math.round((40 + seeded(i + 21) * 260) * 100000),
+  })).sort((a, b) => b.flagged_count - a.flagged_count);
+  return {
+    total_works: MOCK_TOTAL,
+    total_amount: 8_642_000_000,
+    avg_lag_days: 187,
+    label_counts: { training_label: 1240, gat_top: 500, new: 13260 },
+    status_breakdown,
+    score_distribution,
+    top_risky_mps,
+    avg_lag_flagged_vs_normal: { flagged_avg_lag: 412, normal_avg_lag: 143 },
+  };
+}
