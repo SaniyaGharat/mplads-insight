@@ -43,7 +43,7 @@ export function RiskTable({ rows, offset, selected, isLoading, onSelect, onLabel
               "Status",
               "Score",
               "Label Status",
-              "Review",
+              "Mark",
             ].map((h) => (
               <th
                 key={h}
@@ -96,18 +96,20 @@ export function RiskTable({ rows, offset, selected, isLoading, onSelect, onLabel
                         e.stopPropagation();
                         onLabel(row.work_index, "s");
                       }}
-                      className="border border-alert/40 px-1.5 py-0.5 text-[11px] whitespace-nowrap text-alert hover:bg-alert/10"
+                      title="Mark suspicious"
+                      className="w-6 border border-alert/40 py-0.5 text-[11px] font-medium text-alert hover:bg-alert/10"
                     >
-                      Susp.
+                      S
                     </button>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         onLabel(row.work_index, "n");
                       }}
-                      className="border border-ok/40 px-1.5 py-0.5 text-[11px] whitespace-nowrap text-ok hover:bg-ok/10"
+                      title="Mark normal"
+                      className="w-6 border border-ok/40 py-0.5 text-[11px] font-medium text-ok hover:bg-ok/10"
                     >
-                      Normal
+                      N
                     </button>
                   </div>
                 </td>
