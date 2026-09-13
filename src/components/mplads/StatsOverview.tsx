@@ -150,12 +150,21 @@ export function StatsOverview({ stats, isLoading, isMock, error }: Props) {
 
         <ChartCard
           title="Anomaly score distribution"
-          subtitle="Most works cluster low; a long tail carries the high-score outliers"
+          subtitle="Equal-count buckets — note how wide the final bucket is compared to the rest"
         >
-          <ResponsiveContainer width="100%" height={240}>
+          <ResponsiveContainer width="100%" height={260}>
             <BarChart data={stats.score_distribution} barCategoryGap={1}>
               <CartesianGrid stroke={GRID} vertical={false} />
-              <XAxis dataKey="bucket" {...axisProps} interval={0} angle={-30} height={46} dy={10} />
+              <XAxis
+                dataKey="bucket"
+                {...axisProps}
+                interval={0}
+                angle={-35}
+                height={64}
+                dy={12}
+                textAnchor="end"
+                tick={{ fill: AXIS, fontSize: 10 }}
+              />
               <YAxis {...axisProps} />
               <Tooltip {...tooltipStyle()} cursor={{ fill: "oklch(0.6 0.05 155 / 0.08)" }} />
               <Bar dataKey="count">
@@ -168,6 +177,10 @@ export function StatsOverview({ stats, isLoading, isMock, error }: Props) {
               </Bar>
             </BarChart>
           </ResponsiveContainer>
+          <p className="mt-2 px-2 text-[11px] italic text-muted-foreground">
+            Each bar holds roughly the same number of works (~10%). The skew is in the bucket
+            widths, not the heights — the final bucket alone spans scores up to 13,913.
+          </p>
         </ChartCard>
 
         <ChartCard title="Top 10 highest-risk MPs" subtitle="Ranked by flagged work count">
