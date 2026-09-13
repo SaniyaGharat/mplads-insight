@@ -276,10 +276,25 @@ function mockStats(): StatsResponse {
     status,
     count: Math.round(1200 + seeded(i + 1) * 4200),
   }));
-  const buckets = ["0.0–0.1", "0.1–0.2", "0.2–0.3", "0.3–0.4", "0.4–0.5", "0.5–0.6", "0.6–0.7", "0.7–0.8", "0.8–0.9", "0.9–1.0"];
-  const score_distribution = buckets.map((bucket, i) => ({
+  // Equal-count (percentile) buckets: ~10% of works per bucket, so bar
+  // heights stay roughly level. The skew shows up as bucket WIDTH — the
+  // final bucket spans a huge score range while the low-score buckets are
+  // narrow.
+  const percentileBuckets = [
+    "0.0–0.02",
+    "0.02–0.05",
+    "0.05–0.10",
+    "0.10–0.18",
+    "0.18–0.31",
+    "0.31–0.55",
+    "0.55–1.10",
+    "1.10–2.40",
+    "2.40–6.80",
+    "6.80–13913.7",
+  ];
+  const score_distribution = percentileBuckets.map((bucket, i) => ({
     bucket,
-    count: Math.round(4800 * Math.exp(-i * 0.62) + seeded(i + 5) * 90),
+    count: Math.round(1480 + seeded(i + 5) * 160 - i * 8),
   }));
   const top_risky_mps = MPS.map((MP, i) => ({
     MP,
