@@ -15,7 +15,7 @@ interface Props {
   stats: StatsResponse | null;
   isLoading: boolean;
   isMock: boolean;
-  error?: string;
+  error?: string | undefined;
 }
 
 const SAGE = "oklch(0.6 0.05 155)";
