@@ -15,7 +15,7 @@ interface Props {
   stats: StatsResponse | null;
   isLoading: boolean;
   isMock: boolean;
-  error?: string;
+  error?: string | undefined;
 }
 
 const SAGE = "oklch(0.6 0.05 155)";
@@ -112,11 +112,7 @@ export function StatsOverview({ stats, isLoading, isMock, error }: Props) {
       )}
 
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-6">
-        <Kpi
-          label="Total works reviewed"
-          value={stats.total_works.toLocaleString("en-IN")}
-          className
-        />
+        <Kpi label="Total works reviewed" value={stats.total_works.toLocaleString("en-IN")} />
         <Kpi label="Total amount flagged" value={formatINR(stats.total_amount)} />
         <Kpi
           label="Avg. sanction lag"
