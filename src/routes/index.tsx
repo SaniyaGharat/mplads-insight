@@ -14,6 +14,7 @@ import {
 import { API_BASE_URL } from "@/lib/config";
 import { cn } from "@/lib/utils";
 import { RiskTable } from "@/components/mplads/RiskTable";
+import { StatsOverview } from "@/components/mplads/StatsOverview";
 import { ExplainPanel } from "@/components/mplads/ExplainPanel";
 import { NetworkGraph } from "@/components/mplads/NetworkGraph";
 
