@@ -5,6 +5,7 @@ import {
   fetchExplain,
   fetchGraph,
   fetchRiskScores,
+  fetchStats,
   postLabel,
   type LabelTotals,
   type LabelValue,
@@ -51,6 +52,8 @@ function Dashboard() {
   });
 
   const graph = useQuery({ queryKey: ["graph", 50], queryFn: () => fetchGraph(50) });
+
+  const stats = useQuery({ queryKey: ["stats"], queryFn: () => fetchStats() });
 
   const explain = useQuery({
     queryKey: ["explain", selected?.work_index],
@@ -112,6 +115,15 @@ function Dashboard() {
       )}
 
       <main className="mx-auto grid max-w-[1600px] gap-5 px-6 py-6 xl:grid-cols-[minmax(0,1fr)_420px]">
+        <div className="xl:col-span-2">
+          <StatsOverview
+            stats={stats.data?.data ?? null}
+            isLoading={stats.isLoading}
+            isMock={stats.data?.source === "mock"}
+            error={stats.data?.error}
+          />
+        </div>
+
         <section className="border border-border bg-card">
           <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border px-5 py-3">
             <div>
